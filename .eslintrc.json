@@ -1,3 +1,40 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+    "extends": ["next/core-web-vitals", "next/typescript"],
+    "overrides": [
+        {
+            "files": ["*.tsx", "*.ts"],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "ecmaVersion": 2020,
+                "sourceType": "module",
+                "project": ["tsconfig.json"],
+                "createDefaultProgram": true
+            },
+            "plugins": ["@typescript-eslint", "import", "prettier", "simple-import-sort"],
+            "rules": {
+                "@typescript-eslint/ban-ts-comment": "off",
+                "@typescript-eslint/no-empty-function": "off",
+                "@typescript-eslint/no-explicit-any": "error",
+                "@typescript-eslint/consistent-type-imports": "error",
+                "@typescript-eslint/no-unused-vars": ["warn", { "args": "none" }],
+                // "@typescript-eslint/no-unused-vars": ["error", {"vars": "all", "args": "none", "caughtErrors": "none"}],
+                "complexity": ["error", 6],
+                "import/first": "warn",
+                "import/newline-after-import": "warn",
+                "import/no-duplicates": "warn",
+                "no-empty-function": "off",
+                "prettier/prettier": "warn",
+                "simple-import-sort/exports": "warn",
+                "simple-import-sort/imports": "warn",
+                "quote-props": ["error", "as-needed"],
+                "no-unreachable": "warn"
+            }
+        },
+        {
+            "files": ["*.pug"],
+            "parser": "eslint-plugin-pug",
+            "plugins": ["pug", "prettier"],
+            "rules": {}
+        }
+    ]
 }
