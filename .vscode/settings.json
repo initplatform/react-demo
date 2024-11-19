@@ -1,3 +1,43 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": true
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+        "editor.formatOnSave": true
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "never"
+    },
+    "editor.formatOnSave": false,
+    "eslint.format.enable": true,
+    "javascript.format.enable": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingEmptyBraces": false,
+    "json.schemas": [
+        {
+            "fileMatch": ["cypress.json"],
+            "url": "https://on.cypress.io/cypress.schema.json"
+        },
+        {
+            "fileMatch": [".prettierrc.json"],
+            "url": "http://json.schemastore.org/prettierrc"
+        },
+        {
+            "fileMatch": [".eslint.json"],
+            "url": "http://json.schemastore.org/eslint"
+        }
+    ],
+    "puglint.enable": true,
+    "puglint.run": "onSave",
+    "scss.lint.duplicateProperties": "error",
+    "typescript.format.enable": true,
+    "yaml.completion": true,
+    "yaml.format.enable": true,
+    "[yaml]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml",
+        "editor.tabSize": 2
+    }
 }

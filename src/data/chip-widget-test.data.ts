@@ -1,6 +1,6 @@
 import type { PixarCharacter } from '@/types/chip-widget';
 
-export const pixarData: PixarCharacter[] = [
+export const pixarCharacters: PixarCharacter[] = [
     {
         movie: 'Toy Story',
         firstName: 'Woody',
