@@ -71,7 +71,7 @@ const ColumnInput: React.FC<ColumnInputProps> = ({ columns, onColumnSelect }) =>
                 placeholder="Column name..."
             />
             {suggestions.length > 0 && (
-                <div className="absolute z-10 bg-white border rounded mt-1 p-2">
+                <div className="absolute z-10 bg-white border rounded mt-1 p-2 top-8">
                     <h3 className="font-bold">Select a column</h3>
                     <ul>
                         {suggestions.map((col) => (

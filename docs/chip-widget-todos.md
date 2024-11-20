@@ -8,5 +8,10 @@
 - [x] Escape should clear out input while typing or tabbing
 - [ ] Case sensitivity for filter?
 - [ ] Select from all values in container for filter input string for =?
+- [ ] Add sort
+- [ ] Add group by
+- [ ] Add tests
+
+## Future
 
 - [ ] Control-click filter by cell
