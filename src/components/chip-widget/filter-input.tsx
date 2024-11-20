@@ -1,22 +1,54 @@
-import React, { useEffect, useRef } from 'react';
+import db from 'just-debounce';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-// export interface Filter {
-//     column: string;
-//     operator: string;
-//     value: string;
-// }
+import { type WidgetColumn, type WidgetFilterInput, WidgetFilterKind } from '@/types/chip-widget';
 
 interface FilterInputProps {
-    columnKind: string;
-    // onApplyFilter: (filter: Filter[]) => void;
+    column: WidgetColumn;
+    onApplyFilterInput: (filter: WidgetFilterInput) => void;
 }
 
-const FilterInput: React.FC<FilterInputProps> = ({ columnKind }) => {
+const FilterInput: React.FC<FilterInputProps> = ({ column, onApplyFilterInput }) => {
     const inputRef = useRef<HTMLInputElement>(null); // Create a ref for the input element
+
+    const [input, setInput] = useState('');
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setInput(value || '');
+        applyFilter(value);
+    };
+
+    // INFO: useCallback complains dependencies unknown error
+    const applyFilter = useMemo(
+        () =>
+            db((value: string) => {
+                onApplyFilterInput({
+                    kind: WidgetFilterKind.string,
+                    value,
+                });
+            }, 300),
+        [onApplyFilterInput]
+    );
 
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus(); // Set focus when the component mounts
+        }
+        const element = inputRef.current;
+        if (element) {
+            const handleKeyDown = (event: KeyboardEvent) => {
+                if (event.key === 'Escape') {
+                    setInput('');
+                }
+            };
+
+            element.addEventListener('keydown', handleKeyDown);
+            return () => {
+                // This code will run when the component unmounts
+                element.removeEventListener('keydown', handleKeyDown);
+                console.log('OperatorSelect unmounted!');
+            };
         }
     }, []); // Empty dependency array ensures it runs once after mount
 
@@ -25,8 +57,8 @@ const FilterInput: React.FC<FilterInputProps> = ({ columnKind }) => {
             <input
                 ref={inputRef}
                 type="text"
-                // value={input}
-                // onChange={handleInputChange}
+                value={input}
+                onChange={handleInputChange}
                 className="inline-block px-1 outline-none w-full"
                 placeholder="Text..."
             />

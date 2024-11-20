@@ -6,3 +6,7 @@
 - [ ] Should user be able to select same column more than once? (yes...)
 - [ ] When too many chips, how to handle overflow?
 - [x] Escape should clear out input while typing or tabbing
+- [ ] Case sensitivity for filter?
+- [ ] Select from all values in container for filter input string for =?
+
+- [ ] Control-click filter by cell

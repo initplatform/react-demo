@@ -14,12 +14,13 @@ export interface WidgetOperator<T = WidgetOperatorName> {
 }
 
 export enum WidgetOperatorName {
+    contains = 'contains',
     equals = 'equals',
     greaterThan = 'greaterThan',
     lessThan = 'lessThan',
     notEquals = 'notEquals',
-    groupBy = 'groupBy',
     sort = 'sort',
+    // groupBy = 'groupBy',
 }
 
 export enum WidgetOperatorKind {
@@ -35,4 +36,20 @@ export type WidgetOperatorMap = {
 export interface WidgetColumn {
     name: string;
     displayString: string;
+}
+
+export interface WidgetFilter {
+    column: WidgetColumn;
+    operator: WidgetOperator;
+    input: WidgetFilterInput;
+}
+export enum WidgetFilterKind {
+    string = 'string',
+    date = 'date',
+    number = 'number',
+}
+
+export interface WidgetFilterInput {
+    kind: WidgetFilterKind;
+    value: string;
 }

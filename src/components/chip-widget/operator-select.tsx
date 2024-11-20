@@ -12,10 +12,10 @@ const OperatorSelect: React.FC<OperatorSelectProps> = ({ onOperatorSelect }) => 
     const divRef = useRef<HTMLDivElement>(null);
 
     const [operator, setOperator] = useState<WidgetOperator>(
-        widgetOperatorMap[WidgetOperatorName.equals]
+        widgetOperatorMap[WidgetOperatorName.contains]
     );
 
-    const [showOperatorDropdown, setShowOperatorDropdown] = useState<boolean>(true);
+    const [showOperatorDropdown, setShowOperatorDropdown] = useState<boolean>(false);
 
     const handleKeyDown = (event: React.KeyboardEvent, operator: WidgetOperator) => {
         if (event.key === 'Enter') {
@@ -38,7 +38,7 @@ const OperatorSelect: React.FC<OperatorSelectProps> = ({ onOperatorSelect }) => 
         // This code will run when the component mounts
         console.log('OperatorSelect mounted!');
         const element = divRef.current;
-        onOperatorSelect(widgetOperatorMap[WidgetOperatorName.equals]);
+        onOperatorSelect(widgetOperatorMap[WidgetOperatorName.contains]);
 
         if (element) {
             const handleKeyDown = (event: KeyboardEvent) => {

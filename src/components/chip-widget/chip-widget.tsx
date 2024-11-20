@@ -3,16 +3,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import ActionSelector from '@/components/chip-widget/action-selector';
 import Chip from '@/components/chip-widget/chip';
 import ChipList from '@/components/chip-widget/chip-list';
-import type { WidgetColumn } from '@/types/chip-widget';
+import ColumnInput from '@/components/chip-widget/column-input';
+import type { WidgetColumn, WidgetFilter, WidgetFilterInput } from '@/types/chip-widget';
 
-import ColumnInput from './column-input';
+interface ChipWidgetProps {
+    columns: WidgetColumn[];
+    onSetFilters: (filter: (WidgetFilter | null)[]) => void;
+}
 
-const ChipWidget: React.FC<{ columns: WidgetColumn[] }> = ({ columns }) => {
+const ChipWidget: React.FC<ChipWidgetProps> = ({ columns, onSetFilters }) => {
     const chipRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    const [filters, setFilters] = useState<{ column: string; operator: string; value: string }[]>(
-        []
-    );
+    const [filters, setFilters] = useState<(WidgetFilter | null)[]>([]);
     const [groupBy, setGroupBy] = useState<string | null>(null);
     const [sort, setSort] = useState<{ column: string; order: 'ASC' | 'DESC' } | null>(null);
 
@@ -22,27 +24,35 @@ const ChipWidget: React.FC<{ columns: WidgetColumn[] }> = ({ columns }) => {
         setSelectedColumns([...selectedColumns, column]);
     };
 
-    const addFilter = (newFilter: { column: string; operator: string; value: string }) => {
-        setFilters([...filters, newFilter]);
+    const applyFilter = (newFilter: WidgetFilter, index: number) => {
+        setFilters((prevFilters) => {
+            const newFilters = [...prevFilters];
+            newFilters[index] = newFilter; // Update the filter at the given index
+            return newFilters;
+        });
     };
 
-    const addGroupBy = (column: string) => {
-        setGroupBy(column);
-    };
+    useEffect(() => {
+        onSetFilters(filters);
+    }, [onSetFilters, filters]);
 
-    const addSort = (newSort: { column: string; order: 'ASC' | 'DESC' }) => {
-        setSort(newSort);
-    };
+    // const addGroupBy = (column: string) => {
+    //     setGroupBy(column);
+    // };
 
-    const removeChip = (type: 'filter' | 'groupBy' | 'sort', indexOrColumn: number | string) => {
-        if (type === 'filter') {
-            setFilters(filters.filter((_, i) => i !== indexOrColumn));
-        } else if (type === 'groupBy') {
-            setGroupBy(null);
-        } else if (type === 'sort') {
-            setSort(null);
-        }
-    };
+    // const addSort = (newSort: { column: string; order: 'ASC' | 'DESC' }) => {
+    //     setSort(newSort);
+    // };
+
+    // const removeChip = (type: 'filter' | 'groupBy' | 'sort', indexOrColumn: number | string) => {
+    //     if (type === 'filter') {
+    //         setFilters(filters.filter((_, i) => i !== indexOrColumn));
+    //     } else if (type === 'groupBy') {
+    //         setGroupBy(null);
+    //     } else if (type === 'sort') {
+    //         setSort(null);
+    //     }
+    // };
 
     const removeColumn = (index: number) => {
         setSelectedColumns((prevColumns) => {
@@ -50,6 +60,12 @@ const ChipWidget: React.FC<{ columns: WidgetColumn[] }> = ({ columns }) => {
             newColumns.splice(index, 1); // Remove the column at the given index
             return newColumns;
         });
+        setFilters((prevFilters) => {
+            const newFilters = [...prevFilters];
+            newFilters.splice(index, 1); // Remove the filter at the given index
+            return newFilters;
+        });
+        onSetFilters(filters);
     };
 
     useEffect(() => {
@@ -71,22 +87,13 @@ const ChipWidget: React.FC<{ columns: WidgetColumn[] }> = ({ columns }) => {
                             chipRefs.current[index] = el;
                         }}
                         onRemove={removeColumn}
+                        onApplyFilter={(filter: WidgetFilter, index: number) =>
+                            applyFilter(filter, index)
+                        }
                     ></Chip>
                 ))}
-                {/* <div contentEditable="true" className="inline bg-white"></div> */}
                 <ColumnInput columns={columns} onColumnSelect={columnSelect} />
             </div>
-            {/* <ColumnInput columns={columns} onColumnSelect={setSelectedColumn} />
-            {selectedColumn && (
-                <ActionSelector
-                    column={selectedColumn}
-                    groupByEnabled={!groupBy}
-                    onAddFilter={addFilter}
-                    onAddGroupBy={addGroupBy}
-                    onAddSort={addSort}
-                />
-            )}
-            <ChipList filters={filters} groupBy={groupBy} sort={sort} onRemoveChip={removeChip} /> */}
         </div>
     );
 };

@@ -2,6 +2,11 @@ import type { WidgetColumn, WidgetOperator, WidgetOperatorMap } from '@/types/ch
 import { WidgetOperatorKind, WidgetOperatorName } from '@/types/chip-widget';
 
 export const widgetOperatorMap: WidgetOperatorMap = {
+    [WidgetOperatorName.contains]: {
+        name: WidgetOperatorName.contains,
+        displayString: 'contains',
+        kind: WidgetOperatorKind.filter,
+    },
     [WidgetOperatorName.equals]: {
         name: WidgetOperatorName.equals,
         displayString: '=',
@@ -22,11 +27,11 @@ export const widgetOperatorMap: WidgetOperatorMap = {
         displayString: '!=',
         kind: WidgetOperatorKind.filter,
     },
-    [WidgetOperatorName.groupBy]: {
-        name: WidgetOperatorName.groupBy,
-        displayString: 'Group By',
-        kind: WidgetOperatorKind.groupBy,
-    },
+    // [WidgetOperatorName.groupBy]: {
+    //     name: WidgetOperatorName.groupBy,
+    //     displayString: 'Group By',
+    //     kind: WidgetOperatorKind.groupBy,
+    // },
     [WidgetOperatorName.sort]: {
         name: WidgetOperatorName.sort,
         displayString: 'Sort',
