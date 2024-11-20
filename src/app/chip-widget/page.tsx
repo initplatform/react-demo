@@ -3,7 +3,6 @@
 import React, { useMemo, useState } from 'react';
 
 import ChipWidget from '@/components/chip-widget/chip-widget';
-// import type { Filter } from '@/components/chip-widget/filter-input';
 import PixarTable from '@/components/chip-widget/pixar-table';
 import { widgetColumns } from '@/data/chip-widget-data';
 import { pixarCharacters } from '@/data/chip-widget-test.data';
@@ -17,6 +16,8 @@ const ChipWidgetPage: React.FC = () => {
     const filteredData = useMemo(() => {
         let data = [...pixarCharacters];
 
+        console.log(filters);
+
         // Apply filters
         filters.forEach((filter) => {
             console.log(filter);
@@ -28,7 +29,10 @@ const ChipWidgetPage: React.FC = () => {
                 const cellValue = row[column.name as keyof PixarCharacter];
                 switch (operator.name) {
                     case WidgetOperatorName.contains:
-                        return cellValue.toString().includes(input.value);
+                        return cellValue
+                            .toString()
+                            .toLowerCase()
+                            .includes(input.value.toLowerCase());
                     case WidgetOperatorName.equals:
                         return cellValue == input.value;
                     case WidgetOperatorName.notEquals:
@@ -37,8 +41,6 @@ const ChipWidgetPage: React.FC = () => {
                         return Number(cellValue) > Number(input.value);
                     case WidgetOperatorName.lessThan:
                         return Number(cellValue) < Number(input.value);
-                    // case 'contains':
-                    //     return String(cellValue).includes(String(value));
                     default:
                         return true;
                 }
@@ -85,7 +87,6 @@ const ChipWidgetPage: React.FC = () => {
             <div className="w-full m-20 p-6 bg-white rounded-lg shadow-md">
                 <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Chip Widget</h1>
                 <ChipWidget columns={widgetColumns} onSetFilters={setFilters}></ChipWidget>
-                {/* <FilterInput onApplyFilter={setFilters}></FilterInput> */}
                 <PixarTable pixarCharacters={filteredData}></PixarTable>
             </div>
         </div>

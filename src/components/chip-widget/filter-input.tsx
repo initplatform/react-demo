@@ -28,8 +28,17 @@ const FilterInput: React.FC<FilterInputProps> = ({ column, onApplyFilterInput })
                     value,
                 });
             }, 300),
-        [onApplyFilterInput]
+        []
     );
+
+    // useEffect(() => {
+    //     console.log(input);
+
+    //     onApplyFilterInput({
+    //         kind: WidgetFilterKind.string,
+    //         value: input,
+    //     });
+    // }, [input]);
 
     useEffect(() => {
         if (inputRef.current) {

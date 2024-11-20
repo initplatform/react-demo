@@ -36,6 +36,7 @@ export type WidgetOperatorMap = {
 export interface WidgetColumn {
     name: string;
     displayString: string;
+    filter?: WidgetFilter;
 }
 
 export interface WidgetFilter {

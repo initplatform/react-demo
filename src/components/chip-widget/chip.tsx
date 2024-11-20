@@ -10,18 +10,13 @@ import type {
     WidgetFilterInput,
     WidgetOperator,
 } from '@/types/chip-widget';
-import { WidgetOperatorKind, WidgetOperatorName } from '@/types/chip-widget';
+import { WidgetFilterKind, WidgetOperatorKind, WidgetOperatorName } from '@/types/chip-widget';
 
 interface ChipProps {
     column: WidgetColumn;
     index: number;
     onRemove: (index: number) => void;
     onApplyFilter: (filter: WidgetFilter, index: number) => void;
-    // onOperatorSelect: (operator: WidgetOperator) => void;
-    // filters: { column: string; operator: string; value: string }[];
-    // groupBy: string | null;
-    // sort: { column: string; order: 'ASC' | 'DESC' } | null;
-    // onRemoveChip: (type: 'filter' | 'groupBy' | 'sort', indexOrColumn: number | string) => void;
 }
 
 const Chip = forwardRef<HTMLDivElement, ChipProps>(
@@ -30,11 +25,16 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
             widgetOperatorMap[WidgetOperatorName.equals]
         );
 
-        // const operatorSelect = (operator: WidgetOperator) => {
-        //     setOperator(operator);
-        // };
+        const [filterInput, setFilterInput] = useState<WidgetFilterInput>({
+            kind: WidgetFilterKind.string,
+            value: '',
+        });
+        const operatorSelect = (operator: WidgetOperator) => {
+            setOperator(operator);
+        };
 
         const applyFilterInput = (filterInput: WidgetFilterInput) => {
+            setFilterInput(filterInput);
             onApplyFilter(
                 {
                     column,
@@ -46,16 +46,25 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
         };
 
         useEffect(() => {
-            if (operator) {
-                switch (operator.kind) {
-                    case WidgetOperatorKind.filter:
-                        break;
+            onApplyFilter(
+                {
+                    column,
+                    operator,
+                    input: filterInput,
+                },
+                index
+            );
 
-                    default:
-                        break;
-                }
-            }
-        }, [operator]);
+            // if (operator) {
+            //     switch (operator.kind) {
+            //         case WidgetOperatorKind.filter:
+            //             break;
+
+            //         default:
+            //             break;
+            //     }
+            // }
+        }, [column, operator, filterInput]);
 
         const close = () => {
             onRemove(index);
@@ -68,7 +77,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
                 className="flex relative rounded-md items-center bg-green-100 py-1 px-2 mr-2 text-sm text-green-800 transition-all shadow-sm"
             >
                 <div className="mr-2">{column.displayString}</div>
-                <OperatorSelect onOperatorSelect={setOperator}></OperatorSelect>
+                <OperatorSelect
+                    onOperatorSelect={(operator: WidgetOperator) => operatorSelect(operator)}
+                ></OperatorSelect>
                 {operator?.kind === WidgetOperatorKind.filter && (
                     <FilterInput
                         column={column}

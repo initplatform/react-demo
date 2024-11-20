@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import ActionSelector from '@/components/chip-widget/action-selector';
 import Chip from '@/components/chip-widget/chip';
-import ChipList from '@/components/chip-widget/chip-list';
 import ColumnInput from '@/components/chip-widget/column-input';
-import type { WidgetColumn, WidgetFilter, WidgetFilterInput } from '@/types/chip-widget';
+import type { WidgetColumn, WidgetFilter } from '@/types/chip-widget';
 
 interface ChipWidgetProps {
     columns: WidgetColumn[];
@@ -15,8 +13,8 @@ const ChipWidget: React.FC<ChipWidgetProps> = ({ columns, onSetFilters }) => {
     const chipRefs = useRef<(HTMLDivElement | null)[]>([]);
 
     const [filters, setFilters] = useState<(WidgetFilter | null)[]>([]);
-    const [groupBy, setGroupBy] = useState<string | null>(null);
-    const [sort, setSort] = useState<{ column: string; order: 'ASC' | 'DESC' } | null>(null);
+    // const [groupBy, setGroupBy] = useState<string | null>(null);
+    // const [sort, setSort] = useState<{ column: string; order: 'ASC' | 'DESC' } | null>(null);
 
     const [selectedColumns, setSelectedColumns] = useState<WidgetColumn[]>([]);
 
@@ -34,25 +32,7 @@ const ChipWidget: React.FC<ChipWidgetProps> = ({ columns, onSetFilters }) => {
 
     useEffect(() => {
         onSetFilters(filters);
-    }, [onSetFilters, filters]);
-
-    // const addGroupBy = (column: string) => {
-    //     setGroupBy(column);
-    // };
-
-    // const addSort = (newSort: { column: string; order: 'ASC' | 'DESC' }) => {
-    //     setSort(newSort);
-    // };
-
-    // const removeChip = (type: 'filter' | 'groupBy' | 'sort', indexOrColumn: number | string) => {
-    //     if (type === 'filter') {
-    //         setFilters(filters.filter((_, i) => i !== indexOrColumn));
-    //     } else if (type === 'groupBy') {
-    //         setGroupBy(null);
-    //     } else if (type === 'sort') {
-    //         setSort(null);
-    //     }
-    // };
+    }, [filters]);
 
     const removeColumn = (index: number) => {
         setSelectedColumns((prevColumns) => {
