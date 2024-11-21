@@ -31,15 +31,6 @@ const FilterInput: React.FC<FilterInputProps> = ({ column, onApplyFilterInput })
         []
     );
 
-    // useEffect(() => {
-    //     console.log(input);
-
-    //     onApplyFilterInput({
-    //         kind: WidgetFilterKind.string,
-    //         value: input,
-    //     });
-    // }, [input]);
-
     useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus(); // Set focus when the component mounts
@@ -56,7 +47,6 @@ const FilterInput: React.FC<FilterInputProps> = ({ column, onApplyFilterInput })
             return () => {
                 // This code will run when the component unmounts
                 element.removeEventListener('keydown', handleKeyDown);
-                console.log('OperatorSelect unmounted!');
             };
         }
     }, []); // Empty dependency array ensures it runs once after mount

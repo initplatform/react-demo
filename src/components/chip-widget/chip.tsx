@@ -21,8 +21,6 @@ interface ChipProps {
 
 const Chip = forwardRef<HTMLDivElement, ChipProps>(
     ({ column, id, onRemove, onApplyFilter }, ref) => {
-        console.log(id);
-
         const [operator, setOperator] = useState<WidgetOperator>(
             widgetOperatorMap[WidgetOperatorName.equals]
         );
@@ -56,16 +54,6 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
                 },
                 id
             );
-
-            // if (operator) {
-            //     switch (operator.kind) {
-            //         case WidgetOperatorKind.filter:
-            //             break;
-
-            //         default:
-            //             break;
-            //     }
-            // }
         }, [column, operator, filterInput]);
 
         const close = () => {
@@ -76,7 +64,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
             <div
                 ref={ref}
                 tabIndex={0}
-                className="flex relative rounded-md items-center bg-green-100 py-1 px-2 mr-2 text-sm text-green-800 transition-all shadow-sm"
+                className="flex relative rounded-md items-center bg-green-100 py-1 px-2 mr-2 text-sm text-green-800 transition-all shadow-sm mt-2"
             >
                 <div className="mr-2">{column.displayString}</div>
                 <OperatorSelect

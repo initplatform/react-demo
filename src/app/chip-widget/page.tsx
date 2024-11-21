@@ -16,11 +16,8 @@ const ChipWidgetPage: React.FC = () => {
     const filteredData = useMemo(() => {
         let data = [...pixarCharacters];
 
-        console.log(filters);
-
         // Apply filters
         filters.forEach((filter) => {
-            console.log(filter);
             if (!filter) {
                 return;
             }

@@ -36,7 +36,6 @@ const OperatorSelect: React.FC<OperatorSelectProps> = ({ onOperatorSelect }) => 
 
     useEffect(() => {
         // This code will run when the component mounts
-        console.log('OperatorSelect mounted!');
         const element = divRef.current;
         onOperatorSelect(widgetOperatorMap[WidgetOperatorName.contains]);
 
@@ -54,7 +53,6 @@ const OperatorSelect: React.FC<OperatorSelectProps> = ({ onOperatorSelect }) => 
             return () => {
                 // This code will run when the component unmounts
                 element.removeEventListener('keydown', handleKeyDown);
-                console.log('OperatorSelect unmounted!');
             };
         }
     }, []); // The empty dependency array ensures this runs only on mount and unmount

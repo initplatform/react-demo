@@ -38,11 +38,10 @@ export interface WidgetColumn {
     displayString: string;
 }
 
-export interface WidgetColumnSelected {
-    name: string;
-    displayString: string;
+export interface WidgetColumnSelected extends WidgetColumn {
     id: string;
     filter?: WidgetFilter;
+    sort?: WidgetSortDirection;
 }
 
 export interface WidgetFilter {
@@ -59,4 +58,9 @@ export enum WidgetFilterKind {
 export interface WidgetFilterInput {
     kind: WidgetFilterKind;
     value: string;
+}
+
+export enum WidgetSortDirection {
+    asc = 'asc',
+    desc = 'desc',
 }

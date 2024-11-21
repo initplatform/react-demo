@@ -59,7 +59,7 @@ const ChipWidget: React.FC<ChipWidgetProps> = ({ columns, onSetFilters }) => {
 
     return (
         <div className="p-4 bg-gray-50 rounded shadow-md space-y-4 mx-auto">
-            <div className="flex bg-white rounded p-2">
+            <div className="flex bg-white rounded pb-2 px-2 flex-wrap">
                 {selectedColumns.map((column, index) => (
                     <Chip
                         key={column.id}
