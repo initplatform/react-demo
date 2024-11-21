@@ -13,14 +13,16 @@ import type {
 import { WidgetFilterKind, WidgetOperatorKind, WidgetOperatorName } from '@/types/chip-widget';
 
 interface ChipProps {
+    id: string;
     column: WidgetColumn;
-    index: number;
-    onRemove: (index: number) => void;
-    onApplyFilter: (filter: WidgetFilter, index: number) => void;
+    onRemove: (id: string) => void;
+    onApplyFilter: (filter: WidgetFilter, id: string) => void;
 }
 
 const Chip = forwardRef<HTMLDivElement, ChipProps>(
-    ({ column, index, onRemove, onApplyFilter }, ref) => {
+    ({ column, id, onRemove, onApplyFilter }, ref) => {
+        console.log(id);
+
         const [operator, setOperator] = useState<WidgetOperator>(
             widgetOperatorMap[WidgetOperatorName.equals]
         );
@@ -41,7 +43,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
                     operator,
                     input: filterInput,
                 },
-                index
+                id
             );
         };
 
@@ -52,7 +54,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
                     operator,
                     input: filterInput,
                 },
-                index
+                id
             );
 
             // if (operator) {
@@ -67,7 +69,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
         }, [column, operator, filterInput]);
 
         const close = () => {
-            onRemove(index);
+            onRemove(id);
         };
 
         return (
