@@ -1,14 +1,15 @@
 import db from 'just-debounce';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import { type WidgetColumn, type WidgetFilterInput, WidgetFilterKind } from '@/types/chip-widget';
+import type { WidgetColumn, WidgetOperator, WidgetOperatorInput } from '@/types/chip-widget';
 
-interface FilterInputProps {
+interface OperatorInputProps {
     column: WidgetColumn;
-    onApplyFilterInput: (filter: WidgetFilterInput) => void;
+    operator: WidgetOperator;
+    onApplyOperatorInput: (input: WidgetOperatorInput) => void;
 }
 
-const FilterInput: React.FC<FilterInputProps> = ({ column, onApplyFilterInput }) => {
+const OperatorInput: React.FC<OperatorInputProps> = ({ column, onApplyOperatorInput }) => {
     const inputRef = useRef<HTMLInputElement>(null); // Create a ref for the input element
 
     const [input, setInput] = useState('');
@@ -16,17 +17,14 @@ const FilterInput: React.FC<FilterInputProps> = ({ column, onApplyFilterInput })
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setInput(value || '');
-        applyFilter(value);
+        applyOperatorInput(value);
     };
 
     // INFO: useCallback complains dependencies unknown error
-    const applyFilter = useMemo(
+    const applyOperatorInput = useMemo(
         () =>
             db((value: string) => {
-                onApplyFilterInput({
-                    kind: WidgetFilterKind.string,
-                    value,
-                });
+                onApplyOperatorInput(value);
             }, 300),
         []
     );
@@ -65,4 +63,4 @@ const FilterInput: React.FC<FilterInputProps> = ({ column, onApplyFilterInput })
     );
 };
 
-export default FilterInput;
+export default OperatorInput;

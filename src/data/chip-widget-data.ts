@@ -1,31 +1,26 @@
 import type { WidgetColumn, WidgetOperator, WidgetOperatorMap } from '@/types/chip-widget';
-import { WidgetOperatorKind, WidgetOperatorName } from '@/types/chip-widget';
+import { WidgetOperatorName } from '@/types/chip-widget';
 
 export const widgetOperatorMap: WidgetOperatorMap = {
     [WidgetOperatorName.contains]: {
         name: WidgetOperatorName.contains,
         displayString: 'contains',
-        kind: WidgetOperatorKind.filter,
     },
     [WidgetOperatorName.equals]: {
         name: WidgetOperatorName.equals,
         displayString: '=',
-        kind: WidgetOperatorKind.filter,
     },
     [WidgetOperatorName.greaterThan]: {
         name: WidgetOperatorName.greaterThan,
         displayString: '>',
-        kind: WidgetOperatorKind.filter,
     },
     [WidgetOperatorName.lessThan]: {
         name: WidgetOperatorName.lessThan,
         displayString: '<',
-        kind: WidgetOperatorKind.filter,
     },
     [WidgetOperatorName.notEquals]: {
         name: WidgetOperatorName.notEquals,
         displayString: '!=',
-        kind: WidgetOperatorKind.filter,
     },
     // [WidgetOperatorName.groupBy]: {
     //     name: WidgetOperatorName.groupBy,
@@ -35,7 +30,6 @@ export const widgetOperatorMap: WidgetOperatorMap = {
     [WidgetOperatorName.sort]: {
         name: WidgetOperatorName.sort,
         displayString: 'Sort',
-        kind: WidgetOperatorKind.sort,
     },
 } as const;
 

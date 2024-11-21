@@ -10,8 +10,10 @@ export interface PixarCharacter {
 export interface WidgetOperator<T = WidgetOperatorName> {
     name: T;
     displayString: string;
-    kind: WidgetOperatorKind;
+    input?: WidgetOperatorInput;
 }
+
+export type WidgetOperatorInput = string | Date | WidgetSortDirection | null;
 
 export enum WidgetOperatorName {
     contains = 'contains',
@@ -21,12 +23,6 @@ export enum WidgetOperatorName {
     notEquals = 'notEquals',
     sort = 'sort',
     // groupBy = 'groupBy',
-}
-
-export enum WidgetOperatorKind {
-    filter = 'filter',
-    groupBy = 'groupBy',
-    sort = 'sort',
 }
 
 export type WidgetOperatorMap = {
@@ -40,24 +36,7 @@ export interface WidgetColumn {
 
 export interface WidgetColumnSelected extends WidgetColumn {
     id: string;
-    filter?: WidgetFilter;
-    sort?: WidgetSortDirection;
-}
-
-export interface WidgetFilter {
-    column: WidgetColumn;
-    operator: WidgetOperator;
-    input: WidgetFilterInput;
-}
-export enum WidgetFilterKind {
-    string = 'string',
-    date = 'date',
-    number = 'number',
-}
-
-export interface WidgetFilterInput {
-    kind: WidgetFilterKind;
-    value: string;
+    operator?: WidgetOperator;
 }
 
 export enum WidgetSortDirection {

@@ -1,60 +1,43 @@
 import React, { forwardRef, useEffect, useState } from 'react';
 
-import FilterInput from '@/components/chip-widget/filter-input';
+import OperatorInput from '@/components/chip-widget/operator-input';
 import OperatorSelect from '@/components/chip-widget/operator-select';
 import CloseButton from '@/components/shared/close-button';
 import { widgetOperatorMap } from '@/data/chip-widget-data';
-import type {
-    WidgetColumn,
-    WidgetFilter,
-    WidgetFilterInput,
-    WidgetOperator,
-} from '@/types/chip-widget';
-import { WidgetFilterKind, WidgetOperatorKind, WidgetOperatorName } from '@/types/chip-widget';
+import type { WidgetColumn, WidgetOperator, WidgetOperatorInput } from '@/types/chip-widget';
+import { WidgetOperatorName } from '@/types/chip-widget';
 
 interface ChipProps {
     id: string;
     column: WidgetColumn;
     onRemove: (id: string) => void;
-    onApplyFilter: (filter: WidgetFilter, id: string) => void;
+    onApplyOperator: (operator: WidgetOperator, id: string) => void;
 }
 
 const Chip = forwardRef<HTMLDivElement, ChipProps>(
-    ({ column, id, onRemove, onApplyFilter }, ref) => {
+    ({ column, id, onRemove, onApplyOperator }, ref) => {
         const [operator, setOperator] = useState<WidgetOperator>(
             widgetOperatorMap[WidgetOperatorName.equals]
         );
 
-        const [filterInput, setFilterInput] = useState<WidgetFilterInput>({
-            kind: WidgetFilterKind.string,
-            value: '',
-        });
         const operatorSelect = (operator: WidgetOperator) => {
             setOperator(operator);
         };
 
-        const applyFilterInput = (filterInput: WidgetFilterInput) => {
-            setFilterInput(filterInput);
-            onApplyFilter(
-                {
-                    column,
-                    operator,
-                    input: filterInput,
-                },
-                id
-            );
+        const applyOperatorInput = (input: WidgetOperatorInput) => {
+            setOperator((prevOperator) => {
+                return {
+                    // Spread only works if object is 1 level deep.
+                    // Pull in just-clone if this object gets deeper
+                    ...prevOperator,
+                    input,
+                };
+            });
         };
 
         useEffect(() => {
-            onApplyFilter(
-                {
-                    column,
-                    operator,
-                    input: filterInput,
-                },
-                id
-            );
-        }, [column, operator, filterInput]);
+            onApplyOperator(operator, id);
+        }, [column, operator]);
 
         const close = () => {
             onRemove(id);
@@ -70,12 +53,11 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
                 <OperatorSelect
                     onOperatorSelect={(operator: WidgetOperator) => operatorSelect(operator)}
                 ></OperatorSelect>
-                {operator?.kind === WidgetOperatorKind.filter && (
-                    <FilterInput
-                        column={column}
-                        onApplyFilterInput={applyFilterInput}
-                    ></FilterInput>
-                )}
+                <OperatorInput
+                    column={column}
+                    operator={operator}
+                    onApplyOperatorInput={applyOperatorInput}
+                ></OperatorInput>
                 <CloseButton onClick={close}></CloseButton>
             </div>
         );
