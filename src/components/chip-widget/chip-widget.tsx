@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 
 import Chip from '@/components/chip-widget/chip';
 import ColumnInput from '@/components/chip-widget/column-input';
-import type { WidgetColumn, WidgetFilter } from '@/types/chip-widget';
+import type { WidgetColumn, WidgetColumnSelected, WidgetFilter } from '@/types/chip-widget';
 
 interface ChipWidgetProps {
     columns: WidgetColumn[];
@@ -16,43 +17,44 @@ const ChipWidget: React.FC<ChipWidgetProps> = ({ columns, onSetFilters }) => {
     // const [groupBy, setGroupBy] = useState<string | null>(null);
     // const [sort, setSort] = useState<{ column: string; order: 'ASC' | 'DESC' } | null>(null);
 
-    const [selectedColumns, setSelectedColumns] = useState<WidgetColumn[]>([]);
+    const [selectedColumns, setSelectedColumns] = useState<WidgetColumnSelected[]>([]);
 
     const columnSelect = (column: WidgetColumn) => {
-        setSelectedColumns([...selectedColumns, column]);
+        setSelectedColumns([
+            ...selectedColumns,
+            {
+                ...column,
+                id: uuid(),
+            },
+        ]);
     };
 
-    const applyFilter = (newFilter: WidgetFilter, index: number) => {
-        setFilters((prevFilters) => {
-            const newFilters = [...prevFilters];
-            newFilters[index] = newFilter; // Update the filter at the given index
-            return newFilters;
-        });
-    };
-
-    useEffect(() => {
-        onSetFilters(filters);
-    }, [filters]);
-
-    const removeColumn = (index: number) => {
+    const applyFilter = (newFilter: WidgetFilter, id: string) => {
         setSelectedColumns((prevColumns) => {
             const newColumns = [...prevColumns];
-            newColumns.splice(index, 1); // Remove the column at the given index
+            const columnIndex = newColumns.findIndex((column) => column.id === id);
+            newColumns[columnIndex].filter = newFilter; // Update the filter at the given index
             return newColumns;
         });
-        setFilters((prevFilters) => {
-            const newFilters = [...prevFilters];
-            newFilters.splice(index, 1); // Remove the filter at the given index
-            return newFilters;
+    };
+
+    const removeColumn = (id: string) => {
+        setSelectedColumns((prevColumns) => {
+            const newColumns = [...prevColumns];
+            const columnIndex = newColumns.findIndex((column) => column.id === id);
+            newColumns.splice(columnIndex, 1); // Remove the column at the given index
+            return newColumns;
         });
         onSetFilters(filters);
     };
 
     useEffect(() => {
-        if (selectedColumns.length > 0) {
-            const lastIndex = selectedColumns.length - 1;
-            chipRefs.current[lastIndex]?.focus();
-        }
+        // if (selectedColumns.length > 0) {
+        //     const lastIndex = selectedColumns.length - 1;
+        //     chipRefs.current[lastIndex]?.focus();
+        // }
+
+        onSetFilters(selectedColumns.map((selectedColumn) => selectedColumn.filter || null));
     }, [selectedColumns]);
 
     return (
@@ -60,15 +62,15 @@ const ChipWidget: React.FC<ChipWidgetProps> = ({ columns, onSetFilters }) => {
             <div className="flex bg-white rounded p-2">
                 {selectedColumns.map((column, index) => (
                     <Chip
-                        key={index}
-                        index={index}
+                        key={column.id}
+                        id={column.id}
                         column={column}
                         ref={(el) => {
                             chipRefs.current[index] = el;
                         }}
                         onRemove={removeColumn}
-                        onApplyFilter={(filter: WidgetFilter, index: number) =>
-                            applyFilter(filter, index)
+                        onApplyFilter={(filter: WidgetFilter, id: string) =>
+                            applyFilter(filter, column.id)
                         }
                     ></Chip>
                 ))}
