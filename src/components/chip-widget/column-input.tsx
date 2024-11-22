@@ -11,7 +11,6 @@ const ColumnInput: React.FC<ColumnInputProps> = ({ columns, onColumnSelect }) =>
     const divRef = useRef<HTMLDivElement>(null);
 
     const [input, setInput] = useState('');
-    // const [selectedValue, setSelectedValue] = useState('');
     const [suggestions, setSuggestions] = useState<WidgetColumn[]>([]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +40,6 @@ const ColumnInput: React.FC<ColumnInputProps> = ({ columns, onColumnSelect }) =>
     };
 
     useEffect(() => {
-        // This code will run when the component mounts
-        console.log('Column Input mounted!');
         const element = divRef.current;
         if (element) {
             const handleKeyDown = (event: KeyboardEvent) => {
@@ -56,13 +53,12 @@ const ColumnInput: React.FC<ColumnInputProps> = ({ columns, onColumnSelect }) =>
             return () => {
                 // This code will run when the component unmounts
                 document.removeEventListener('keydown', handleKeyDown);
-                console.log('Column Input unmounted!');
             };
         }
     }, []); // The empty dependency array ensures this runs only on mount and unmount
 
     return (
-        <div className="inline-flex relative grow" ref={divRef}>
+        <div className="inline-flex relative grow mt-2" ref={divRef}>
             <input
                 type="text"
                 value={input}
