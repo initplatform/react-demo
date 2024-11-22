@@ -1,22 +1,34 @@
 import db from 'just-debounce';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-import type { WidgetColumn, WidgetOperator, WidgetOperatorInput } from '@/types/chip-widget';
+import {
+    type WidgetColumn,
+    type WidgetOperatorInput,
+    WidgetOperatorName,
+    WidgetSortDirection,
+} from '@/types/chip-widget';
 
 interface OperatorInputProps {
     column: WidgetColumn;
-    operator: WidgetOperator;
+    operatorName: WidgetOperatorName;
     onApplyOperatorInput: (input: WidgetOperatorInput) => void;
 }
 
-const OperatorInput: React.FC<OperatorInputProps> = ({ column, onApplyOperatorInput }) => {
+const OperatorInput: React.FC<OperatorInputProps> = ({ onApplyOperatorInput, operatorName }) => {
     const inputRef = useRef<HTMLInputElement>(null); // Create a ref for the input element
 
-    const [input, setInput] = useState('');
+    const [stringInput, setStringInput] = useState<string>('');
+    const [sortInput, setSortInput] = useState<WidgetSortDirection>(WidgetSortDirection.asc);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleStringInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        setInput(value || '');
+        setStringInput(value || '');
+        applyOperatorInput(value);
+    };
+
+    const handleSortInputChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value as WidgetSortDirection; // TODO: Add assertion for type safety
+        setSortInput(value);
         applyOperatorInput(value);
     };
 
@@ -30,14 +42,24 @@ const OperatorInput: React.FC<OperatorInputProps> = ({ column, onApplyOperatorIn
     );
 
     useEffect(() => {
+        if (operatorName !== WidgetOperatorName.sort) {
+            onApplyOperatorInput('');
+        }
+        if (operatorName === WidgetOperatorName.sort) {
+            onApplyOperatorInput(WidgetSortDirection.asc);
+        }
+    }, [operatorName]);
+
+    useEffect(() => {
         if (inputRef.current) {
             inputRef.current.focus(); // Set focus when the component mounts
         }
+
         const element = inputRef.current;
         if (element) {
             const handleKeyDown = (event: KeyboardEvent) => {
                 if (event.key === 'Escape') {
-                    setInput('');
+                    setStringInput('');
                 }
             };
 
@@ -51,14 +73,26 @@ const OperatorInput: React.FC<OperatorInputProps> = ({ column, onApplyOperatorIn
 
     return (
         <div className="ml-2">
-            <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={handleInputChange}
-                className="inline-block px-1 outline-none w-full"
-                placeholder="Text..."
-            />
+            {operatorName !== WidgetOperatorName.sort && (
+                <input
+                    ref={inputRef}
+                    type="text"
+                    value={stringInput}
+                    onChange={handleStringInputChange}
+                    className="inline-block px-1 outline-none w-full"
+                    placeholder="Text..."
+                />
+            )}
+            {operatorName === WidgetOperatorName.sort && (
+                <select
+                    value={sortInput}
+                    onChange={handleSortInputChange}
+                    className="border rounded px-2 py-1"
+                >
+                    <option value={WidgetSortDirection.asc}>Asc</option>
+                    <option value={WidgetSortDirection.desc}>Desc</option>
+                </select>
+            )}
         </div>
     );
 };

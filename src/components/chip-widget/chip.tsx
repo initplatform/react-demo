@@ -3,9 +3,7 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import OperatorInput from '@/components/chip-widget/operator-input';
 import OperatorSelect from '@/components/chip-widget/operator-select';
 import CloseButton from '@/components/shared/close-button';
-import { widgetOperatorMap } from '@/data/chip-widget-data';
 import type { WidgetColumn, WidgetOperator, WidgetOperatorInput } from '@/types/chip-widget';
-import { WidgetOperatorName } from '@/types/chip-widget';
 
 interface ChipProps {
     id: string;
@@ -16,9 +14,7 @@ interface ChipProps {
 
 const Chip = forwardRef<HTMLDivElement, ChipProps>(
     ({ column, id, onRemove, onApplyOperator }, ref) => {
-        const [operator, setOperator] = useState<WidgetOperator>(
-            widgetOperatorMap[WidgetOperatorName.equals]
-        );
+        const [operator, setOperator] = useState<WidgetOperator | null>(null);
 
         const operatorSelect = (operator: WidgetOperator) => {
             setOperator(operator);
@@ -26,6 +22,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
 
         const applyOperatorInput = (input: WidgetOperatorInput) => {
             setOperator((prevOperator) => {
+                if (!prevOperator) {
+                    return null;
+                }
                 return {
                     // Spread only works if object is 1 level deep.
                     // Pull in just-clone if this object gets deeper
@@ -36,7 +35,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
         };
 
         useEffect(() => {
-            onApplyOperator(operator, id);
+            if (operator) {
+                onApplyOperator(operator, id);
+            }
         }, [column, operator]);
 
         const close = () => {
@@ -53,11 +54,13 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
                 <OperatorSelect
                     onOperatorSelect={(operator: WidgetOperator) => operatorSelect(operator)}
                 ></OperatorSelect>
-                <OperatorInput
-                    column={column}
-                    operator={operator}
-                    onApplyOperatorInput={applyOperatorInput}
-                ></OperatorInput>
+                {operator && (
+                    <OperatorInput
+                        column={column}
+                        operatorName={operator.name}
+                        onApplyOperatorInput={applyOperatorInput}
+                    ></OperatorInput>
+                )}
                 <CloseButton onClick={close}></CloseButton>
             </div>
         );

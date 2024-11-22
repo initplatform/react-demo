@@ -11,7 +11,6 @@ const ColumnInput: React.FC<ColumnInputProps> = ({ columns, onColumnSelect }) =>
     const divRef = useRef<HTMLDivElement>(null);
 
     const [input, setInput] = useState('');
-    // const [selectedValue, setSelectedValue] = useState('');
     const [suggestions, setSuggestions] = useState<WidgetColumn[]>([]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

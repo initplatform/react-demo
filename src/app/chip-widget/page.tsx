@@ -7,7 +7,7 @@ import PixarTable from '@/components/chip-widget/pixar-table';
 import { widgetColumns } from '@/data/chip-widget-data';
 import { pixarCharacters } from '@/data/chip-widget-test.data';
 import type { PixarCharacter, WidgetColumnSelected } from '@/types/chip-widget';
-import { WidgetOperatorName } from '@/types/chip-widget';
+import { WidgetOperatorName, WidgetSortDirection } from '@/types/chip-widget';
 
 const ChipWidgetPage: React.FC = () => {
     const [columns, setColumns] = useState<(WidgetColumnSelected | null)[]>([]);
@@ -44,39 +44,28 @@ const ChipWidgetPage: React.FC = () => {
                         return true;
                 }
             });
+
+            if (name === WidgetOperatorName.sort) {
+                // eslint-disable-next-line complexity
+                data.sort((a, b) => {
+                    const aValue = a[column.name as keyof PixarCharacter];
+                    const bValue = b[column.name as keyof PixarCharacter];
+                    const aValueInt = parseInt(aValue as string);
+                    const bValueInt = parseInt(bValue as string);
+                    const areNumbers = !Number.isNaN(aValueInt) && !Number.isNaN(bValueInt);
+                    if (areNumbers) {
+                        if (input === WidgetSortDirection.asc) {
+                            return aValueInt < bValueInt ? -1 : aValueInt > bValueInt ? 1 : 0;
+                        }
+                        return aValueInt > bValueInt ? -1 : aValueInt < bValueInt ? 1 : 0;
+                    }
+                    if (input === WidgetSortDirection.asc) {
+                        return String(aValue).localeCompare(String(bValue));
+                    }
+                    return String(bValue).localeCompare(String(aValue));
+                });
+            }
         });
-
-        // // Apply sorting
-        // if (sortOption) {
-        //     const { column, direction } = sortOption;
-        //     data.sort((a, b) => {
-        //         const aValue = a[column as keyof Character];
-        //         const bValue = b[column as keyof Character];
-        //         if (direction === 'asc') {
-        //             return String(aValue).localeCompare(String(bValue));
-        //         }
-        //         return String(bValue).localeCompare(String(aValue));
-        //     });
-        // }
-
-        // // Apply grouping
-        // if (groupByColumn) {
-        //     const groupedData: Character[] = [];
-        //     const groupMap: Record<string, Character[]> = {};
-
-        //     data.forEach((row) => {
-        //         const key = row[groupByColumn as keyof Character];
-        //         if (!groupMap[key]) groupMap[key] = [];
-        //         groupMap[key].push(row);
-        //     });
-
-        //     Object.entries(groupMap).forEach(([key, rows]) => {
-        //         groupedData.push({ movie: key, firstName: '-', lastName: '-', age: 0, role: '-' });
-        //         groupedData.push(...rows);
-        //     });
-
-        //     return groupedData;
-        // }
 
         return data;
     }, [columns]);

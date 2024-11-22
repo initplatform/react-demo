@@ -12,11 +12,6 @@ interface ChipWidgetProps {
 
 const ChipWidget: React.FC<ChipWidgetProps> = ({ columns, onSetColumns }) => {
     const chipRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-    const [filters, setFilters] = useState<(WidgetOperator | null)[]>([]);
-    // const [groupBy, setGroupBy] = useState<string | null>(null);
-    // const [sort, setSort] = useState<{ column: string; order: 'ASC' | 'DESC' } | null>(null);
-
     const [selectedColumns, setSelectedColumns] = useState<WidgetColumnSelected[]>([]);
 
     const columnSelect = (column: WidgetColumn) => {
@@ -52,7 +47,6 @@ const ChipWidget: React.FC<ChipWidgetProps> = ({ columns, onSetColumns }) => {
         //     const lastIndex = selectedColumns.length - 1;
         //     chipRefs.current[lastIndex]?.focus();
         // }
-
         onSetColumns(selectedColumns);
     }, [selectedColumns]);
 
