@@ -17,7 +17,7 @@ interface OperatorInputProps {
 const OperatorInput: React.FC<OperatorInputProps> = ({ onApplyOperatorInput, operatorName }) => {
     const inputRef = useRef<HTMLInputElement>(null); // Create a ref for the input element
 
-    const [stringInput, setStringInput] = useState<string>('');
+    const [stringInput, setStringInput] = useState<string | null>(null);
     const [sortInput, setSortInput] = useState<WidgetSortDirection>(WidgetSortDirection.asc);
 
     const handleStringInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,12 +42,14 @@ const OperatorInput: React.FC<OperatorInputProps> = ({ onApplyOperatorInput, ope
     );
 
     useEffect(() => {
-        if (operatorName !== WidgetOperatorName.sort) {
-            onApplyOperatorInput('');
-        }
-        if (operatorName === WidgetOperatorName.sort) {
-            onApplyOperatorInput(WidgetSortDirection.asc);
-        }
+            if (operatorName !== WidgetOperatorName.sort) {
+                if (stringInput === null) {
+                    onApplyOperatorInput('');
+                }
+            }
+            if (operatorName === WidgetOperatorName.sort) {
+                onApplyOperatorInput(WidgetSortDirection.asc);
+            }
     }, [operatorName]);
 
     useEffect(() => {
@@ -77,9 +79,9 @@ const OperatorInput: React.FC<OperatorInputProps> = ({ onApplyOperatorInput, ope
                 <input
                     ref={inputRef}
                     type="text"
-                    value={stringInput}
+                    value={stringInput || ''}
                     onChange={handleStringInputChange}
-                    className="inline-block px-1 outline-none w-full"
+                    className="inline-block px-1 outline-none w-full operator-input"
                     placeholder="Text..."
                 />
             )}
@@ -87,7 +89,7 @@ const OperatorInput: React.FC<OperatorInputProps> = ({ onApplyOperatorInput, ope
                 <select
                     value={sortInput}
                     onChange={handleSortInputChange}
-                    className="border rounded px-2 py-1"
+                    className="border rounded px-2 py-1 operator-input-select"
                 >
                     <option value={WidgetSortDirection.asc}>Asc</option>
                     <option value={WidgetSortDirection.desc}>Desc</option>

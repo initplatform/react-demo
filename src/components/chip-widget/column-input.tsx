@@ -65,6 +65,7 @@ const ColumnInput: React.FC<ColumnInputProps> = ({ columns, onColumnSelect }) =>
                 onChange={handleInputChange}
                 className="inline-block px-1 outline-none w-full"
                 placeholder="Column name..."
+                data-testid="columnNameInput"
             />
             {suggestions.length > 0 && (
                 <div className="absolute z-10 bg-white border rounded mt-1 p-2 top-8">
