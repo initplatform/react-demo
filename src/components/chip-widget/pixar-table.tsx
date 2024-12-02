@@ -20,19 +20,19 @@ const PixarTable: React.FC<PixarTableProps> = ({ pixarCharacters }) => {
                         <th className="border border-gray-300 px-4 py-2">Birthday</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="pixar-table-body">
                     {pixarCharacters.map((character, index) => (
                         <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                            <td className="border border-gray-300 px-4 py-2">{character.movie}</td>
-                            <td className="border border-gray-300 px-4 py-2">
+                            <td className="border border-gray-300 px-4 py-2 cell-movie">{character.movie}</td>
+                            <td className="border border-gray-300 px-4 py-2 cell-first-name">
                                 {character.firstName}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2">
+                            <td className="border border-gray-300 px-4 py-2 cell-last-name">
                                 {character.lastName}
                             </td>
-                            <td className="border border-gray-300 px-4 py-2">{character.age}</td>
-                            <td className="border border-gray-300 px-4 py-2">{character.role}</td>
-                            <td className="border border-gray-300 px-4 py-2">
+                            <td className="border border-gray-300 px-4 py-2 cell-age">{character.age}</td>
+                            <td className="border border-gray-300 px-4 py-2 cell-role">{character.role}</td>
+                            <td className="border border-gray-300 px-4 py-2 cell-birthday">
                                 {character.birthday}
                             </td>
                         </tr>
