@@ -16,7 +16,7 @@ const ChipWidgetPage: React.FC = () => {
         let data = [...pixarCharacters];
 
         // Apply operators
-        columns.forEach((column) => {
+        columns.forEach((column) => {            
             if (!column?.operator) {
                 return;
             }
@@ -24,6 +24,7 @@ const ChipWidgetPage: React.FC = () => {
                 return;
             }
             const { name, input } = column.operator;
+            
             data = data.filter((row) => {
                 const cellValue = row[column.name as keyof PixarCharacter];
                 switch (name) {

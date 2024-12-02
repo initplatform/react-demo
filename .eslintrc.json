@@ -2,6 +2,15 @@
     "extends": ["next/core-web-vitals", "next/typescript"],
     "overrides": [
         {
+            "files": ["*.spec.ts"], // Match test files
+            "extends": [
+                "eslint:recommended",
+                "plugin:@typescript-eslint/recommended",
+                "prettier",
+                "plugin:jest/recommended"        
+            ] // Use a simpler config for these files
+        },
+        {
             "files": ["*.tsx", "*.ts"],
             "parser": "@typescript-eslint/parser",
             "parserOptions": {
@@ -10,7 +19,14 @@
                 "project": ["tsconfig.json"],
                 "createDefaultProgram": true
             },
-            "plugins": ["@typescript-eslint", "import", "prettier", "simple-import-sort"],
+            "plugins": [
+                "@typescript-eslint",
+                "import",
+                "prettier",
+                "simple-import-sort",
+                "next/core-web-vitals",
+                "next/typescript"
+            ],
             "rules": {
                 "@typescript-eslint/ban-ts-comment": "off",
                 "@typescript-eslint/no-empty-function": "off",

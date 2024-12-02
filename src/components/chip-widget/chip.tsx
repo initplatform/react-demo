@@ -15,30 +15,24 @@ interface ChipProps {
 const Chip = forwardRef<HTMLDivElement, ChipProps>(
     ({ column, id, onRemove, onApplyOperator }, ref) => {
         const [operator, setOperator] = useState<WidgetOperator | null>(null);
+        const [operatorInput, setOperatorInput] = useState<WidgetOperatorInput | null>(null);
 
-        const operatorSelect = (operator: WidgetOperator) => {
+        const operatorSelect = (operator: WidgetOperator) => {            
             setOperator(operator);
         };
 
         const applyOperatorInput = (input: WidgetOperatorInput) => {
-            setOperator((prevOperator) => {
-                if (!prevOperator) {
-                    return null;
-                }
-                return {
-                    // Spread only works if object is 1 level deep.
-                    // Pull in just-clone if this object gets deeper
-                    ...prevOperator,
-                    input,
-                };
-            });
+            setOperatorInput(input);
         };
 
         useEffect(() => {
             if (operator) {
-                onApplyOperator(operator, id);
+                onApplyOperator({
+                    ...operator,
+                    input: operatorInput
+                }, id);
             }
-        }, [column, operator]);
+        }, [column, operator, operatorInput]);
 
         const close = () => {
             onRemove(id);

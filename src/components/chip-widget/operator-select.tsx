@@ -24,7 +24,7 @@ const OperatorSelect: React.FC<OperatorSelectProps> = ({ onOperatorSelect }) => 
         }
     };
 
-    const handleSelect = (operator: WidgetOperator) => {
+    const handleSelect = (operator: WidgetOperator) => {        
         setOperator(operator);
         setShowOperatorDropdown(false);
         onOperatorSelect(operator);
@@ -47,6 +47,14 @@ const OperatorSelect: React.FC<OperatorSelectProps> = ({ onOperatorSelect }) => 
                 if (event.key === '`') {
                     setShowOperatorDropdown(true);
                 }
+                if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    (event.target as HTMLElement)?.nextSibling && ((event.target as HTMLElement)?.nextSibling as HTMLElement)?.focus();
+                }
+                if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    (event.target as HTMLElement)?.previousSibling && ((event.target as HTMLElement)?.previousSibling as HTMLElement)?.focus();
+                }
             };
 
             element.addEventListener('keydown', handleKeyDown);
@@ -59,7 +67,10 @@ const OperatorSelect: React.FC<OperatorSelectProps> = ({ onOperatorSelect }) => 
 
     return (
         <div className="relative cursor-pointer" ref={divRef} tabIndex={0}>
-            <div className="bg-white px-2 rounded-md" onClick={() => operatorClicked()}>
+            <div 
+                className="bg-white px-2 rounded-md operator-selector"
+                onClick={() => operatorClicked()}
+            >
                 {operator.displayString}
             </div>
             {showOperatorDropdown && (
@@ -71,7 +82,7 @@ const OperatorSelect: React.FC<OperatorSelectProps> = ({ onOperatorSelect }) => 
                                 key={operator.name}
                                 onClick={() => handleSelect(operator)}
                                 onKeyDown={(e) => handleKeyDown(e, operator)}
-                                className="p-2 cursor-pointer hover:bg-gray-100 whitespace-nowrap"
+                                className={"p-2 cursor-pointer hover:bg-gray-100 whitespace-nowrap operator-name-" + operator.name}
                                 tabIndex={0}
                             >
                                 {operator.displayString}
